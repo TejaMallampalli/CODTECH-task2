@@ -1,0 +1,65 @@
+CREATE DATABASE IF NOT EXISTS Hotel_Booking_System;
+
+USE Hotel_Booking_System;
+
+CREATE TABLE IF NOT EXISTS Rooms (
+  Room_ID INT AUTO_INCREMENT,
+  Room_Type VARCHAR(50),
+  Room_Number INT,
+  Floor INT,
+  Rate DECIMAL(10, 2),
+  PRIMARY KEY (Room_ID)
+);
+
+CREATE TABLE IF NOT EXISTS Customers (
+  Customer_ID INT AUTO_INCREMENT,
+  First_Name VARCHAR(50),
+  Last_Name VARCHAR(50),
+  Email VARCHAR(100),
+  Phone VARCHAR(20),
+  Address VARCHAR(200),
+  PRIMARY KEY (Customer_ID)
+);
+
+CREATE TABLE IF NOT EXISTS Reservations (
+  Reservation_ID INT AUTO_INCREMENT,
+  Customer_ID INT,
+  Room_ID INT,
+  Check_In DATE,
+  Check_Out DATE,
+  Status VARCHAR(50),
+  PRIMARY KEY (Reservation_ID),
+  FOREIGN KEY (Customer_ID) REFERENCES Customers(Customer_ID),
+  FOREIGN KEY (Room_ID) REFERENCES Rooms(Room_ID)
+);
+
+CREATE TABLE IF NOT EXISTS Payments (
+  Payment_ID INT AUTO_INCREMENT,
+  Reservation_ID INT,
+  Payment_Method VARCHAR(50),
+  Payment_Date DATE,
+  Amount DECIMAL(10, 2),
+  PRIMARY KEY (Payment_ID),
+  FOREIGN KEY (Reservation_ID) REFERENCES Reservations(Reservation_ID)
+);
+
+INSERT INTO Rooms (Room_Type, Room_Number, Floor, Rate)
+VALUES
+('Single', 101, 1, 100.00),
+('Double', 202, 2, 150.00),
+('Suite', 303, 3, 250.00);
+
+INSERT INTO Customers (First_Name, Last_Name, Email, Phone, Address)
+VALUES
+('John', 'Doe', 'john.doe@example.com', '123-456-7890', '123 Main St'),
+('Jane', 'Smith', 'jane.smith@example.com', '987-654-3210', '456 Elm St');
+
+INSERT INTO Reservations (Customer_ID, Room_ID, Check_In, Check_Out, Status)
+VALUES
+(1, 1, '2022-01-01', '2022-01-03', 'Confirmed'),
+(2, 2, '2022-01-05', '2022-01-07', 'Pending');
+
+INSERT INTO Payments (Reservation_ID, Payment_Method, Payment_Date, Amount)
+VALUES
+(1, 'Credit Card', '2022-01-01', 300.00),
+(2, 'Cash', '2022-01-05', 450.00);
